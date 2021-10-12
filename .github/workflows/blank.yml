@@ -1,0 +1,29 @@
+
+name: CI
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./basic-conditional
+        continue-on-error: true
+
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJSON(job) }}
+        run: echo "$JOB_CONTEXT"
+        
+      - run: echo "test failure"
+        if: failure()
+
+      - run: echo "test success"
+        if: success()
+      
+      - run: echo "test always"
+        if: always()
