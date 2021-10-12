@@ -1,7 +1,5 @@
 name: 'Test composite run steps downloads containers'
 description: 'Test composite run steps downloads containers'
-inputs:
-outputs:
 runs:
     using: "composite"
     steps:
