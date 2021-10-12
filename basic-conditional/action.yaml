@@ -1,0 +1,17 @@
+name: 'Test composite run steps downloads containers'
+description: 'Test composite run steps downloads containers'
+inputs:
+outputs:
+runs:
+    using: "composite"
+    steps:
+      - uses: actions/checkout@v2
+      - env:
+          JOB_CONTEXT: ${{ toJSON(job) }}
+        run: echo "$JOB_CONTEXT"
+      - run: exit 1
+      - run: echo "hello success"
+      - run: echo "hello failure"
+        if: failure()
+      - run: echo "hello always"
+        if: always()
