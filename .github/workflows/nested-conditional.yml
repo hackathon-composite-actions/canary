@@ -1,5 +1,5 @@
 
-name: Basic Conditional
+name: Nested Conditional
 
 on:
   workflow_dispatch:
