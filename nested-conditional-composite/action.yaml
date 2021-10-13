@@ -37,7 +37,7 @@ runs:
       - run: if [ -z "${{ steps.composite-action.outputs.default }}" ]; then exit 1; else echo "Success"; fi
         name: step-default
         shell: bash
-        if: inputs.child-exit-code != 1
+        if: ${{ inputs.child-exit-code != 1 }}
       - run: if [ -z "${{ steps.composite-action.outputs.success }}" ]; then exit 1; else echo "Success"; fi
         name: step-success
         shell: bash
