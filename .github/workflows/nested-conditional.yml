@@ -1,0 +1,20 @@
+
+name: Basic Conditional
+
+on:
+  workflow_dispatch:
+
+jobs:
+  nested-conditionals:
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        exit-code: [0, 1]
+        child-exit-code: [0, 1]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./nested-conditional-composite
+        id: composite-action
+        with:
+          exit-code: ${{matrix.exit-code}}
+          child-exit-code: ${{matrix.child-exit-code}}
