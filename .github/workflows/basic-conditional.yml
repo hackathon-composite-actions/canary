@@ -1,0 +1,18 @@
+
+name: Basic Conditional
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./conditional-composite
+        id: composite-action
+      - runs: if [ -z "${{ steps.composite-action.outputs.default }}" ]; then exit 1; fi
+      - runs: if [ -z "${{ steps.composite-action.outputs.success }}" ]; then exit 1; fi
+      - runs: if [[ ! -z "${{ steps.composite-action.outputs.failure }}" ]]; then exit 1; fi
+      - runs: if [ -z "${{ steps.composite-action.outputs.always }}" ]; then exit 1; fi
