@@ -8,6 +8,7 @@ jobs:
   nested-conditionals:
     runs-on: self-hosted
     strategy:
+      fail-fast: false
       matrix:
         exit-code: [0, 1]
         child-exit-code: [0, 1]
@@ -15,6 +16,13 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./nested-conditional-composite
         id: composite-action
+        continue-on-error: true
         with:
           exit-code: ${{matrix.exit-code}}
           child-exit-code: ${{matrix.child-exit-code}}
+      - run: if [ -z "${{ steps.composite-action.failure }}" ]; then exit 1; else echo "Expected a failure and got one!"; fi
+      # want to ensure the conclusion of ${{steps.composite-action.outcome?}}
+        if: matrix.exit-code == 1 || matrix.child-exit-code == 1
+      - run: if [ -z "${{ steps.composite-action.success }}" ]; then exit 1; else echo "Expected a success and got one!"; fi
+      # want to ensure the conclusion of ${{steps.composite-action.outcome?}}
+        if: matrix.exit-code == 0 && matrix.child-exit-code == 0

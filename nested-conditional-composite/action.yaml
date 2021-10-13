@@ -7,20 +7,14 @@ inputs:
   child-exit-code:
     description: 'Child Action fails if set to non-zero'
     default: '0'
-  
+
 outputs:
-  default:
-    description: "Did step run with default?"
-    value: ${{ steps.default-conditional.outputs.default }}
   success:
-    description: "Did step run with success?"
-    value: ${{ steps.success-conditional.outputs.success }}
+    description: "Did step run with default?"
+    value: ${{ steps.success.outputs.success }}
   failure:
-    description: "Did step run with failure?"
-    value: ${{ steps.failure-conditional.outputs.failure }}
-  always:
-    description: "Did step run with always?"
-    value: ${{ steps.always-conditional.outputs.always }}
+    description: "Did step run with default?"
+    value: ${{ steps.failure.outputs.failure }}
 
 runs:
     using: "composite"
@@ -37,7 +31,7 @@ runs:
       - run: if [ -z "${{ steps.composite-action.outputs.default }}" ]; then exit 1; else echo "Success"; fi
         name: step-default
         shell: bash
-        if: ${{ inputs.child-exit-code != 1 }}
+        if: inputs.child-exit-code != 1
       - run: if [ -z "${{ steps.composite-action.outputs.success }}" ]; then exit 1; else echo "Success"; fi
         name: step-success
         shell: bash
@@ -67,3 +61,11 @@ runs:
         name: step-always
         shell: bash
         if: inputs.child-exit-code == 1
+
+      - run: echo "::set-output name=failure::true"
+        id: failure
+        if: failure()
+
+      - run: echo "::set-output name=success::true"
+        id: success
+        if: success()
