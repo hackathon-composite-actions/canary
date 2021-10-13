@@ -65,7 +65,9 @@ runs:
       - run: echo "::set-output name=failure::true"
         id: failure
         if: failure()
+        shell: bash
 
       - run: echo "::set-output name=success::true"
         id: success
         if: success()
+        shell: bash
