@@ -35,5 +35,5 @@ jobs:
         name: step-success
       - run: if [ -z "${{ steps.composite-action.outputs.failure }}" ]; then exit 1; else echo "Success"; fi
         name: step-failure
-      - run: if [[ ! -z "${{ steps.composite-action.outputs.always }}" ]]; then exit 1; else echo "Success"; fi
+      - run: if [ -z "${{ steps.composite-action.outputs.always }}" ]; then exit 1; else echo "Success"; fi
         name: step-always
