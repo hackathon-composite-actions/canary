@@ -32,6 +32,7 @@ runs:
         shell: bash
       
       - run: exit ${{ inputs.exit-code }}
+        shell: bash
 
       - run: echo "::set-output name=default::true"
         id: default-conditional
