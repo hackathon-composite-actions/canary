@@ -1,0 +1,53 @@
+name: 'Conditional Composite'
+description: 'Test composite run step conditionals'
+inputs:
+  exit-code:
+    description: 'Action fails if set to non-zero'
+    default: '0'
+outputs:
+  default:
+    description: "Did step run with default?"
+    value: ${{ steps.default-conditional.outputs.default }}
+  success:
+    description: "Did step run with success?"
+    value: ${{ steps.success-conditional.outputs.success }}
+  failure:
+    description: "Did step run with failure?"
+    value: ${{ steps.failure-conditional.outputs.failure }}
+  always:
+    description: "Did step run with always?"
+    value: ${{ steps.always-conditional.outputs.always }}
+
+runs:
+    using: "composite"
+    steps:
+      - env:
+          JOB_CONTEXT: ${{ toJSON(job) }}
+        run: echo "$JOB_CONTEXT"
+        shell: bash
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJSON(steps) }}
+        run: echo "$STEPS_CONTEXT"
+        shell: bash
+      
+      - run: exit ${{ inputs.exit-code }}
+
+      - run: echo "::set-output name=default::true"
+        id: default-conditional
+        shell: bash
+
+      - run: echo "::set-output name=success::true"
+        id: success-conditional
+        shell: bash
+        if: success()
+
+      - run: echo "::set-output name=failure::true"
+        id: failure-conditional
+        shell: bash
+        if: failure()
+
+      - run: echo "::set-output name=always::true"
+        id: always-conditional
+        shell: bash
+        if: always()
