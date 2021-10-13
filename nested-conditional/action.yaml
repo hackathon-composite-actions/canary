@@ -17,6 +17,12 @@ runs:
         run: echo "$JOB_CONTEXT"
         shell: bash
         if: always()
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJSON(steps) }}
+        run: echo "$STEPS_CONTEXT"
+        shell: bash
+        if: always()
       - run: echo "hello success"
         shell: bash
       - run: echo "hello failure"
